@@ -1,6 +1,6 @@
 import { CheckboxPage } from "../support/pageRepository/checkboxPage.js";
 
-describe("Form Page Tests", () => {
+describe("Checkbox Page Tests", () => {
   const checkboxPage = new CheckboxPage();
 
   beforeEach(() => {
@@ -18,41 +18,40 @@ describe("Form Page Tests", () => {
     `Only news from the selected categories should appear`,
     { tags: ["@positive", "@high"] },
     () => {
-      cy.selectCategories(["Technology", "Health"]);
-      checkboxPage.getDoneButton().click();
-      cy.verifyNewsCategories(["Technology", "Health"]);
+      checkboxPage.selectCategories(["Technology", "Health"]);
+      checkboxPage.doneButton.click();
+      checkboxPage.verifyNewsCategories(["Technology", "Health"]);
     }
   );
 
   /**
-   * Navigate to the news feed page
    * Click 'Set Preferences'
-   * Check 'Technology' and 'Health'
+   * Uncheck all categories
    * Click 'Done'
-   * Verify only Technology and Health news are displayed
+   * Verify that no news cards are shown
+   * Verify that a friendly message is displayed
    */
   it(
     `A message indicating no news should be displayed`,
     { tags: ["@negative", "@medium"] },
     () => {
-      cy.unselectCategories();
-      checkboxPage.getDoneButton().click();
-      cy.verifyNewsCategories();
+      checkboxPage.unselectCategories();
+      checkboxPage.doneButton.click();
+      checkboxPage.verifyNewsCategories();
     }
   );
 
   /**
-   * Navigate to the news feed page
+   * Note current news items
    * Click 'Set Preferences'
-   * Check 'Technology' and 'Health'
-   * Click 'Done'
-   * Verify only Technology and Health news are displayed
+   * Close the dialog without making changes
+   * Verify that news items remain the same
    */
   it(
     `News items before and after dialog open should match`,
     { tags: ["@positive", "@low"] },
     () => {
-      cy.verifyNewsItemsConsistency();
+      checkboxPage.verifyNewsItemsConsistency();
     }
   );
 });

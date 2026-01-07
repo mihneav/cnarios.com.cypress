@@ -1,0 +1,44 @@
+{
+  "correctAnswers": [
+    "get(url)",
+    "To locate a single web element",
+    "ID",
+    "To provide explicit wait until a condition is met"
+  ],
+  "incorrectAnswers": [
+    "navigate().refresh()",
+    "To close the browser",
+    "XPath",
+    "To refresh the browser"
+  ],
+  "partialCorrectAnswers": [
+    "get(url)",
+    "To locate a single web element",
+    "ID",
+    "To refresh the browser"
+  ],
+  "partialIncorrectAnswers": [
+    "get(url)",
+    "To close the browser",
+    "ID",
+    "To refresh the browser"
+  ],
+  "expectedResults": {
+    "fullScore": {
+      "score": 4,
+      "message": "Pass 🎉"
+    },
+    "zeroScore": {
+      "score": 0,
+      "message": "Fail ❌"
+    },
+    "partialPass": {
+      "score": 3,
+      "message": "Pass 🎉"
+    },
+    "partialFail": {
+      "score": 2,
+      "message": "Fail ❌"
+    }
+  }
+}

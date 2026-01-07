@@ -1,7 +1,14 @@
 import { RadioPage } from "../support/pageRepository/radioPage.js";
 
-describe("Form Page Tests", () => {
+describe("Radio Button Page Tests", () => {
   const radioPage = new RadioPage();
+  let testData;
+
+  before(() => {
+    cy.fixture("radioTestData").then((data) => {
+      testData = data;
+    });
+  });
 
   beforeEach(() => {
     radioPage.visit();
@@ -18,13 +25,11 @@ describe("Form Page Tests", () => {
     `Score displays as full and result shows 'Pass 🎉'`,
     { tags: ["@positive", "@high"] },
     () => {
-      cy.submitQuiz([
-        "get(url)",
-        "To locate a single web element",
-        "ID",
-        "To provide explicit wait until a condition is met",
-      ]);
-      cy.verifyQuizResult(4, "Pass 🎉");
+      radioPage.submitQuiz(testData.correctAnswers);
+      radioPage.verifyQuizResult(
+        testData.expectedResults.fullScore.score,
+        testData.expectedResults.fullScore.message
+      );
     }
   );
 
@@ -39,13 +44,11 @@ describe("Form Page Tests", () => {
     `Score should be 0 and result should show 'Fail ❌'`,
     { tags: ["@negative", "@high"] },
     () => {
-      cy.submitQuiz([
-        "navigate().refresh()",
-        "To close the browser",
-        "XPath",
-        "To refresh the browser",
-      ]);
-      cy.verifyQuizResult(0, "Fail ❌");
+      radioPage.submitQuiz(testData.incorrectAnswers);
+      radioPage.verifyQuizResult(
+        testData.expectedResults.zeroScore.score,
+        testData.expectedResults.zeroScore.message
+      );
     }
   );
 
@@ -59,23 +62,19 @@ describe("Form Page Tests", () => {
     `Should allow retrying quiz and show updated score`,
     { tags: ["@positive", "@medium"] },
     () => {
-      cy.submitQuiz([
-        "get(url)",
-        "To locate a single web element",
-        "ID",
-        "To refresh the browser",
-      ]);
-      cy.verifyQuizResult(3, "Pass 🎉");
+      radioPage.submitQuiz(testData.partialCorrectAnswers);
+      radioPage.verifyQuizResult(
+        testData.expectedResults.partialPass.score,
+        testData.expectedResults.partialPass.message
+      );
 
-      radioPage.getTryAgainButton().click();
+      radioPage.tryAgainButton.click();
 
-      cy.submitQuiz([
-        "get(url)",
-        "To close the browser",
-        "ID",
-        "To refresh the browser",
-      ]);
-      cy.verifyQuizResult(2, "Fail ❌");
+      radioPage.submitQuiz(testData.partialIncorrectAnswers);
+      radioPage.verifyQuizResult(
+        testData.expectedResults.partialFail.score,
+        testData.expectedResults.partialFail.message
+      );
     }
   );
 
@@ -87,10 +86,13 @@ describe("Form Page Tests", () => {
    */
   it(
     `Score should be 0 and 'Fail ❌' should be shown`,
-    { tags: ["@positive", "@medium"] },
+    { tags: ["@negative", "@medium"] },
     () => {
-      cy.submitQuiz();
-      cy.verifyQuizResult(0, "Fail ❌");
+      radioPage.submitQuiz();
+      radioPage.verifyQuizResult(
+        testData.expectedResults.zeroScore.score,
+        testData.expectedResults.zeroScore.message
+      );
     }
   );
 });

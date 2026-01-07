@@ -14,35 +14,123 @@ export class CheckboxPage {
     cy.visit(this.#url);
   }
 
-  getPreferencesButton() {
+  get preferencesButton() {
     return cy.get(this.#preferencesButton);
   }
 
-  getCheckboxes() {
+  get checkboxes() {
     return cy.get(this.#checkbox);
   }
 
-  getCheckboxByLabel(label) {
+  checkboxByLabel(label) {
     return cy.get(this.#checkboxContainer(label));
   }
 
-  getDoneButton() {
+  get doneButton() {
     return cy.get(this.#doneButton);
   }
 
-  getCardRoot() {
+  get cardRoot() {
     return cy.get(this.#cardRoot);
   }
 
-  getCardByLabel(label) {
-    return this.getCardRoot().contains(label).parents(this.#cardRoot);
+  cardByLabel(label) {
+    return this.cardRoot.contains(label).parents(this.#cardRoot);
   }
 
-  getCardTitle() {
+  get cardTitle() {
     return cy.get(this.#cardTitle);
   }
 
-  getCardCaption() {
+  get cardCaption() {
     return cy.get(this.#cardCaption);
+  }
+
+  unselectCategories() {
+    this.preferencesButton.click();
+    this.checkboxes.each(($checkbox) => {
+      if ($checkbox.is(":checked")) {
+        cy.wrap($checkbox).click();
+      }
+    });
+  }
+
+  selectCategories(categories) {
+    this.unselectCategories();
+    // Check the desired categories
+    categories.forEach((category) => {
+      this.checkboxByLabel(category).click();
+    });
+  }
+
+  verifyNewsCategories(expectedCategories) {
+    // Verify only the expected categories are displayed (no other categories)
+    if (!expectedCategories) {
+      cy.contains(
+        'No news to display. Select categories using "Set Preferences".'
+      ).should("be.visible");
+      this.cardRoot.should("not.exist");
+      return;
+    }
+
+    this.checkboxes.each(($checkbox) => {
+      const label = $checkbox.siblings("label").text().trim();
+      if (label && !expectedCategories.includes(label)) {
+        cy.log(`Verified absence of category: ${label}`);
+        expect(this.cardByLabel(label)).to.not.exist;
+      }
+    });
+
+    // Verify expected categories are displayed
+    expectedCategories.forEach((category) => {
+      this.cardByLabel(category).each(($card) => {
+        cy.wrap($card)
+          .should("be.visible")
+          .within(() => {
+            this.cardTitle.should("exist");
+            this.cardCaption.should("exist");
+          });
+      });
+    });
+  }
+
+  getCardTexts() {
+    cy.wrap([]).as("cardTexts");
+    return this.cardRoot
+      .each(($card) => {
+        // For each card, get the title and caption
+        cy.wrap($card).within(() => {
+          this.cardTitle.invoke("text").then((title) => {
+            this.cardCaption.invoke("text").then((caption) => {
+              // Append to the array
+              cy.get("@cardTexts").then((cardTexts) => {
+                cardTexts.push({
+                  title: title.trim(),
+                  caption: caption.trim(),
+                });
+                cy.wrap(cardTexts).as("cardTexts");
+              });
+            });
+          });
+        });
+      })
+      .then(() => cy.get("@cardTexts"));
+  }
+
+  openAndClosePreferences() {
+    this.preferencesButton.click();
+    this.doneButton.click();
+  }
+
+  verifyNewsItemsConsistency() {
+    this.getCardTexts().then((initialCardTexts) => {
+      cy.log("Initial Card Texts:", initialCardTexts);
+      this.preferencesButton.click();
+      this.doneButton.click();
+      this.getCardTexts().then((afterCardTexts) => {
+        cy.log("After Card Texts:", afterCardTexts);
+        expect(afterCardTexts).to.deep.equal(initialCardTexts);
+      });
+    });
   }
 }

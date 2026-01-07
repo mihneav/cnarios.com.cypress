@@ -2,7 +2,13 @@ import { ButtonPage } from "../support/pageRepository/buttonPage.js";
 
 describe("Button Page Tests", () => {
   const buttonPage = new ButtonPage();
-  const cardName = "Anjali Sharma";
+
+  before(() => {
+    cy.fixture("buttonTestData").then((data) => {
+      buttonPage.cardName = data.cardName;
+    });
+  });
+
   beforeEach(() => {
     buttonPage.visit();
   });
@@ -18,7 +24,11 @@ describe("Button Page Tests", () => {
     `Button text and icon should change to 'Following' with a check icon`,
     { tags: ["@positive", "@high"] },
     () => {
-      cy.verifyButtonStateChange(cardName, "Follow", "Following");
+      buttonPage.verifyButtonStateChange(
+        buttonPage.cardName,
+        buttonPage.followState,
+        buttonPage.followingState
+      );
     }
   );
 
@@ -31,8 +41,16 @@ describe("Button Page Tests", () => {
     `Tooltip should display 'Click to follow' or 'Click to unfollow' based on state`,
     { tags: ["@positive", "@medium"] },
     () => {
-      cy.verifyTooltipAndClick(cardName, "Follow", "Unfollow");
-      cy.verifyTooltipAndClick(cardName, "Unfollow", "Follow");
+      buttonPage.verifyTooltipAndClick(
+        buttonPage.cardName,
+        buttonPage.followState,
+        buttonPage.unfollowState
+      );
+      buttonPage.verifyTooltipAndClick(
+        buttonPage.cardName,
+        buttonPage.unfollowState,
+        buttonPage.followState
+      );
     }
   );
 
@@ -46,7 +64,11 @@ describe("Button Page Tests", () => {
     `'Processing..' should appear before state changes and the button should be disabled`,
     { tags: ["@positive", "@medium"] },
     () => {
-      cy.clickButtonAndVerifyState(cardName, "Follow", "Following");
+      buttonPage.clickButtonAndVerifyState(
+        buttonPage.cardName,
+        buttonPage.followState,
+        buttonPage.followingState
+      );
     }
   );
 
@@ -57,8 +79,16 @@ describe("Button Page Tests", () => {
    * Verify button reverts to Follow
    */
   it(`Click Unfollow (toggle back)`, { tags: ["@positive", "@medium"] }, () => {
-    cy.clickButtonAndVerifyState(cardName, "Follow", "Following");
-    cy.clickButtonAndVerifyState(cardName, "Unfollow", "Follow");
+    buttonPage.clickButtonAndVerifyState(
+      buttonPage.cardName,
+      buttonPage.followState,
+      buttonPage.followingState
+    );
+    buttonPage.clickButtonAndVerifyState(
+      buttonPage.cardName,
+      buttonPage.unfollowState,
+      buttonPage.followState
+    );
   });
 
   /**
@@ -72,8 +102,8 @@ describe("Button Page Tests", () => {
     "The selected suggestion card should be removed from the visible list",
     { tags: ["@positive", "@medium"] },
     () => {
-      buttonPage.getRemoveButton(cardName).click();
-      buttonPage.getCardElement(cardName).should("not.exist");
+      buttonPage.removeButton(buttonPage.cardName).click();
+      buttonPage.cardElement(buttonPage.cardName).should("not.exist");
     }
   );
 });

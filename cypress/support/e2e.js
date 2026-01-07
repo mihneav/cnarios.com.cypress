@@ -14,9 +14,6 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import "./buttonPageCommands";
-import "./formPageCommands";
-import "./checkboxPageCommands";
-import "./radioPageCommands";
+
 const { register: registerCypressGrep } = require("@cypress/grep");
 registerCypressGrep();

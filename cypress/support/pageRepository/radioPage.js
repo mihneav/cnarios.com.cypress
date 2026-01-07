@@ -17,23 +17,49 @@ export class RadioPage {
     cy.visit(this.#url);
   }
 
-  getQuestionCardByNumber(questionNumber) {
+  questionCardByNumber(questionNumber) {
     return cy.get(this.#getQuestionCardSelector(questionNumber));
   }
 
-  getQuestionOption(questionNumber, variant) {
+  questionOption(questionNumber, variant) {
     return cy.get(this.#getRadioSelector(questionNumber, variant));
   }
 
-  getScore() {
+  get score() {
     return cy.get(this.#scoreMessage);
   }
 
-  getPassOrFailMessage() {
+  get passOrFailMessage() {
     return cy.get(this.#passOrFailMessage);
   }
 
-  getTryAgainButton() {
+  get tryAgainButton() {
     return cy.get(this.#tryAgainButton);
+  }
+
+  answerQuestion(questionNumber, variant) {
+    this.questionOption(questionNumber, variant).click();
+  }
+
+  fillFormQuestions(answers = null) {
+    if (!answers) return;
+    answers.forEach((answer, index) => {
+      this.answerQuestion(index + 1, answer);
+    });
+  }
+
+  retryQuiz(answers) {
+    this.tryAgainButton.click();
+    this.submitQuiz(answers);
+  }
+
+  submitQuiz(answers) {
+    this.fillFormQuestions(answers);
+    cy.get("button").contains("Submit").click();
+  }
+
+  verifyQuizResult(score, message) {
+    this.score.should("have.text", `Your Score: ${score} / 4`);
+    this.passOrFailMessage.should("have.text", message);
   }
 }

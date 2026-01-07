@@ -22,8 +22,8 @@ describe("Form Page Tests", () => {
     `Form should submit successfully, loader should appear, and confirmation dialog should display with generated ticket IDs`,
     { tags: ["@positive", "@high"] },
     () => {
-      cy.fillAndSubmitForm();
-      cy.verifyFormSubmission();
+      formPage.fillAndSubmitForm();
+      formPage.verifyFormSubmission();
     }
   );
 
@@ -37,7 +37,7 @@ describe("Form Page Tests", () => {
     `Submit button should remain disabled until all fields are filled correctly`,
     { tags: ["@positive", "@medium"] },
     () => {
-      cy.fillFormWithValidation();
+      formPage.fillFormWithValidation();
     }
   );
 
@@ -48,15 +48,15 @@ describe("Form Page Tests", () => {
    * Enter valid phone number
    * Select an event
    * Enter valid number of tickets
-   * Verify email field shows error message
+   * Verify all fields show error messages
    */
   it(
     `Error message should appear below the email field and submission should be blocked`,
     { tags: ["@negative", "@medium"] },
     () => {
-      cy.fillForm();
-      cy.emptyForm();
-      cy.verifyFormErrorMessages();
+      formPage.fillForm();
+      formPage.emptyForm();
+      formPage.verifyFormErrorMessages();
     }
   );
 
@@ -73,8 +73,8 @@ describe("Form Page Tests", () => {
     "Error message should appear below the phone field and submission should be blocked",
     { tags: ["@negative", "@medium"] },
     () => {
-      cy.fillForm();
-      cy.verifyPhoneErrorMessage();
+      formPage.fillForm();
+      formPage.verifyPhoneErrorMessage();
     }
   );
 
@@ -91,8 +91,8 @@ describe("Form Page Tests", () => {
     "Error message should appear below tickets field and Register button should remain disabled",
     { tags: ["@negative", "@high"] },
     () => {
-      cy.fillForm();
-      cy.verifyTicketsErrorMessage();
+      formPage.fillForm();
+      formPage.verifyTicketsErrorMessage();
     }
   );
 
@@ -106,9 +106,9 @@ describe("Form Page Tests", () => {
     "All fields should be cleared and tickets reset to 1",
     { tags: ["@positive", "@low"] },
     () => {
-      cy.fillForm();
-      formPage.getResetButton().click();
-      cy.verifyFormReset();
+      formPage.fillForm();
+      formPage.resetButton.click();
+      formPage.verifyFormReset();
     }
   );
 
@@ -127,11 +127,11 @@ describe("Form Page Tests", () => {
     "Confirmation dialog should display as many ticket IDs as number of tickets entered, all unique",
     { tags: ["@positive", "@high"] },
     () => {
-      let expectedCount = "3";
-      cy.fillForm();
-      formPage.getTicketsInput().clear().type(expectedCount);
-      formPage.getSubmitButton().click();
-      cy.verifyUniqueTicketIds(expectedCount);
+      const expectedCount = "3";
+      formPage.fillForm();
+      formPage.ticketsInput.clear().type(expectedCount);
+      formPage.submitButton.click();
+      formPage.verifyUniqueTicketIds(expectedCount);
     }
   );
 });
