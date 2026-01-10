@@ -3,6 +3,8 @@ export class RadioPage {
   #tryAgainButton = ".text-center > .MuiButtonBase-root";
   #passOrFailMessage = ".MuiTypography-h5";
   #scoreMessage = ".text-center > .MuiTypography-h6";
+  #radioSelectorPattern = (variant) =>
+    `.MuiFormControl-root > .MuiFormGroup-root > :contains(${variant}) :radio`;
 
   #expectedResults = {
     fullScore: {
@@ -29,7 +31,7 @@ export class RadioPage {
 
   #getRadioSelector(questionNumber, variant) {
     const questionCard = this.#getQuestionCardSelector(questionNumber);
-    return `${questionCard}.MuiFormControl-root > .MuiFormGroup-root > :contains(${variant}) :radio`;
+    return `${questionCard}${this.#radioSelectorPattern(variant)}`;
   }
 
   visit() {
