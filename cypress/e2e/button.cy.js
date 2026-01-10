@@ -25,7 +25,6 @@ describe("Button Page Tests", () => {
     { tags: ["@positive", "@high"] },
     () => {
       buttonPage.verifyButtonStateChange(
-        buttonPage.cardName,
         buttonPage.followState,
         buttonPage.followingState
       );
@@ -42,12 +41,10 @@ describe("Button Page Tests", () => {
     { tags: ["@positive", "@medium"] },
     () => {
       buttonPage.verifyTooltipAndClick(
-        buttonPage.cardName,
         buttonPage.followState,
         buttonPage.unfollowState
       );
       buttonPage.verifyTooltipAndClick(
-        buttonPage.cardName,
         buttonPage.unfollowState,
         buttonPage.followState
       );
@@ -65,7 +62,6 @@ describe("Button Page Tests", () => {
     { tags: ["@positive", "@medium"] },
     () => {
       buttonPage.clickButtonAndVerifyState(
-        buttonPage.cardName,
         buttonPage.followState,
         buttonPage.followingState
       );
@@ -80,12 +76,10 @@ describe("Button Page Tests", () => {
    */
   it(`Click Unfollow (toggle back)`, { tags: ["@positive", "@medium"] }, () => {
     buttonPage.clickButtonAndVerifyState(
-      buttonPage.cardName,
       buttonPage.followState,
       buttonPage.followingState
     );
     buttonPage.clickButtonAndVerifyState(
-      buttonPage.cardName,
       buttonPage.unfollowState,
       buttonPage.followState
     );

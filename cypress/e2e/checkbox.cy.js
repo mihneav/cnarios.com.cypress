@@ -2,6 +2,13 @@ import { CheckboxPage } from "../support/pageRepository/checkboxPage.js";
 
 describe("Checkbox Page Tests", () => {
   const checkboxPage = new CheckboxPage();
+  let testData = [];
+
+  before(() => {
+    cy.fixture("checkboxTestData").then((data) => {
+      testData = data;
+    });
+  });
 
   beforeEach(() => {
     checkboxPage.visit();
@@ -18,12 +25,12 @@ describe("Checkbox Page Tests", () => {
     `Only news from the selected categories should appear`,
     { tags: ["@positive", "@high"] },
     () => {
-      checkboxPage.selectCategories(["Technology", "Health"]);
+      const categories = testData.categories;
+      checkboxPage.selectCategories(categories);
       checkboxPage.doneButton.click();
-      checkboxPage.verifyNewsCategories(["Technology", "Health"]);
+      checkboxPage.verifyNewsCategories(categories);
     }
   );
-
   /**
    * Click 'Set Preferences'
    * Uncheck all categories

@@ -2,6 +2,14 @@ import { FormPage } from "../support/pageRepository/formPage.js";
 
 describe("Form Page Tests", () => {
   const formPage = new FormPage();
+  let testData;
+
+  before(() => {
+    cy.fixture("formTestData").then((data) => {
+      testData = data;
+      formPage.personalInfo = testData;
+    });
+  });
 
   beforeEach(() => {
     formPage.visit();

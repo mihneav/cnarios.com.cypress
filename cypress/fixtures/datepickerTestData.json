@@ -1,0 +1,47 @@
+{
+  "google": {
+    "company": "Google",
+    "startDate": "2022-01-01",
+    "endDate": "2023-01-01"
+  },
+  "microsoft": {
+    "company": "Microsoft",
+    "startDate": "2021-01-01",
+    "endDate": "2022-01-01"
+  },
+  "amazon": {
+    "company": "Amazon",
+    "startDate": "2021-06-01",
+    "endDate": "2021-12-01"
+  },
+  "amazonDelete": {
+    "company": "Amazon",
+    "startDate": "2021-01-01",
+    "endDate": "2022-01-01"
+  },
+  "jobA": {
+    "company": "Job A",
+    "startDate": "2019-01-01",
+    "endDate": "2020-01-01"
+  },
+  "jobB": {
+    "company": "Job B",
+    "startDate": "2020-02-01",
+    "endDate": "2021-02-01"
+  },
+  "ibm": {
+    "company": "IBM",
+    "startDate": "2023-05-15",
+    "endDate": "2023-05-15"
+  },
+  "invalidCompany": {
+    "company": "Invalid Co",
+    "startDate": "",
+    "endDate": ""
+  },
+  "invalidDates": {
+    "company": "",
+    "startDate": "2023-01-01",
+    "endDate": "2022-01-01"
+  }
+}

@@ -4,6 +4,25 @@ export class RadioPage {
   #passOrFailMessage = ".MuiTypography-h5";
   #scoreMessage = ".text-center > .MuiTypography-h6";
 
+  #expectedResults = {
+    fullScore: {
+      score: 4,
+      message: "Pass 🎉",
+    },
+    zeroScore: {
+      score: 0,
+      message: "Fail ❌",
+    },
+    partialPass: {
+      score: 3,
+      message: "Pass 🎉",
+    },
+    partialFail: {
+      score: 2,
+      message: "Fail ❌",
+    },
+  };
+
   #getQuestionCardSelector(questionNumber) {
     return `:nth-child(${questionNumber}) > .MuiCardContent-root > `;
   }
@@ -35,6 +54,26 @@ export class RadioPage {
 
   get tryAgainButton() {
     return cy.get(this.#tryAgainButton);
+  }
+
+  get expectedResults() {
+    return this.#expectedResults;
+  }
+
+  get fullScore() {
+    return this.#expectedResults.fullScore;
+  }
+
+  get zeroScore() {
+    return this.#expectedResults.zeroScore;
+  }
+
+  get partialPass() {
+    return this.#expectedResults.partialPass;
+  }
+
+  get partialFail() {
+    return this.#expectedResults.partialFail;
   }
 
   answerQuestion(questionNumber, variant) {

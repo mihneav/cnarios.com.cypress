@@ -4,11 +4,12 @@ export class CheckboxPage {
   #checkbox = 'input[type="checkbox"]';
   #checkboxContainer = (label) =>
     `.MuiDialogContent-root > .flex > :contains("${label}") ${this.#checkbox}`;
-
   #doneButton = ".MuiDialogActions-root > .MuiButtonBase-root";
   #cardRoot = ".max-w-3xl > > .MuiCardContent-root";
   #cardTitle = ".MuiTypography-h6";
   #cardCaption = ".MuiTypography-caption";
+  #NONEWSMESSAGE =
+    'No news to display. Select categories using "Set Preferences".';
 
   visit() {
     cy.visit(this.#url);
@@ -57,7 +58,6 @@ export class CheckboxPage {
 
   selectCategories(categories) {
     this.unselectCategories();
-    // Check the desired categories
     categories.forEach((category) => {
       this.checkboxByLabel(category).click();
     });
@@ -66,9 +66,7 @@ export class CheckboxPage {
   verifyNewsCategories(expectedCategories) {
     // Verify only the expected categories are displayed (no other categories)
     if (!expectedCategories) {
-      cy.contains(
-        'No news to display. Select categories using "Set Preferences".'
-      ).should("be.visible");
+      cy.contains(this.#NONEWSMESSAGE).should("be.visible");
       this.cardRoot.should("not.exist");
       return;
     }
@@ -77,7 +75,7 @@ export class CheckboxPage {
       const label = $checkbox.siblings("label").text().trim();
       if (label && !expectedCategories.includes(label)) {
         cy.log(`Verified absence of category: ${label}`);
-        expect(this.cardByLabel(label)).to.not.exist;
+        this.cardByLabel(label).should("not.exist");
       }
     });
 

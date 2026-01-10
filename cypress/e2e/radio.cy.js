@@ -27,8 +27,8 @@ describe("Radio Button Page Tests", () => {
     () => {
       radioPage.submitQuiz(testData.correctAnswers);
       radioPage.verifyQuizResult(
-        testData.expectedResults.fullScore.score,
-        testData.expectedResults.fullScore.message
+        radioPage.fullScore.score,
+        radioPage.fullScore.message
       );
     }
   );
@@ -46,8 +46,8 @@ describe("Radio Button Page Tests", () => {
     () => {
       radioPage.submitQuiz(testData.incorrectAnswers);
       radioPage.verifyQuizResult(
-        testData.expectedResults.zeroScore.score,
-        testData.expectedResults.zeroScore.message
+        radioPage.zeroScore.score,
+        radioPage.zeroScore.message
       );
     }
   );
@@ -64,16 +64,16 @@ describe("Radio Button Page Tests", () => {
     () => {
       radioPage.submitQuiz(testData.partialCorrectAnswers);
       radioPage.verifyQuizResult(
-        testData.expectedResults.partialPass.score,
-        testData.expectedResults.partialPass.message
+        radioPage.partialPass.score,
+        radioPage.partialPass.message
       );
 
       radioPage.tryAgainButton.click();
 
       radioPage.submitQuiz(testData.partialIncorrectAnswers);
       radioPage.verifyQuizResult(
-        testData.expectedResults.partialFail.score,
-        testData.expectedResults.partialFail.message
+        radioPage.partialFail.score,
+        radioPage.partialFail.message
       );
     }
   );
@@ -90,8 +90,8 @@ describe("Radio Button Page Tests", () => {
     () => {
       radioPage.submitQuiz();
       radioPage.verifyQuizResult(
-        testData.expectedResults.zeroScore.score,
-        testData.expectedResults.zeroScore.message
+        radioPage.zeroScore.score,
+        radioPage.zeroScore.message
       );
     }
   );

@@ -11,7 +11,6 @@ export class FormPage {
   #submitButton = this.#getByTestId("btn-submit");
   #resetButton = this.#getByTestId("btn-reset");
   #dropdown = "#menu- > .MuiPaper-root";
-
   #modal = {
     container: ".MuiDialog-container > .MuiPaper-root",
     title: "#confirm-dialog-title",
@@ -26,31 +25,25 @@ export class FormPage {
     tickets: this.#getByTestId("confirm-tickets"),
     ticketIds: this.#getByTestId("ticket-id-list"),
   };
-
   #errorMessage = {
     fullName: "#«r1»-helper-text",
     email: "#«r2»-helper-text",
     phone: "#«r3»-helper-text",
     tickets: "#«r5»-helper-text",
   };
-
   #TICKET_ID_PATTERN = /T102-/;
   #DEFAULT_SELECT_OPTION = "-- Select --";
-
-  #ERROR_MESSAGES = {
+  #errorMessages = {
     fullName: "Enter at least 3 characters",
     email: "Enter a valid email address",
     phone: "Enter a valid phone (7-15 digits)",
     tickets: "Enter an integer between 1 and 10",
   };
+  #personalInfo;
 
-  #personalInfo = {
-    fullName: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+919876543210",
-    event: "Automation Summit",
-    numberOfTickets: "2",
-  };
+  set personalInfo(data) {
+    this.#personalInfo = data;
+  }
 
   visit() {
     cy.visit(this.#url);
@@ -211,13 +204,10 @@ export class FormPage {
   }
 
   verifyFormErrorMessages() {
-    this.fullNameErrorMessage.should(
-      "have.text",
-      this.#ERROR_MESSAGES.fullName
-    );
-    this.emailErrorMessage.should("have.text", this.#ERROR_MESSAGES.email);
-    this.phoneErrorMessage.should("have.text", this.#ERROR_MESSAGES.phone);
-    this.ticketsErrorMessage.should("have.text", this.#ERROR_MESSAGES.tickets);
+    this.fullNameErrorMessage.should("have.text", this.#errorMessages.fullName);
+    this.emailErrorMessage.should("have.text", this.#errorMessages.email);
+    this.phoneErrorMessage.should("have.text", this.#errorMessages.phone);
+    this.ticketsErrorMessage.should("have.text", this.#errorMessages.tickets);
     this.submitButton.should("be.disabled");
   }
 
@@ -225,7 +215,7 @@ export class FormPage {
     this.phoneInput.clear().type("12345");
     this.phoneErrorMessage
       .should("be.visible")
-      .and("have.text", this.#ERROR_MESSAGES.phone);
+      .and("have.text", this.#errorMessages.phone);
   }
 
   verifyTicketsErrorMessage() {
@@ -233,7 +223,7 @@ export class FormPage {
     this.emailInput.click(); // Trigger validation
     this.ticketsErrorMessage
       .should("be.visible")
-      .and("have.text", this.#ERROR_MESSAGES.tickets);
+      .and("have.text", this.#errorMessages.tickets);
     this.submitButton.should("be.disabled");
   }
 

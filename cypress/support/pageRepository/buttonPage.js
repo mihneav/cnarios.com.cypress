@@ -2,15 +2,23 @@ export class ButtonPage {
   #url = "/button#try-it-yourself";
   #card = ".MuiPaper-root";
   #tooltip = ".MuiTooltip-tooltip";
-
+  #buttonSelector = (state) => `[aria-label="${state}"]`;
+  #doneIconClass = "done-icon";
   // Button states
   #processingText = "Processing..";
   #followState = "Follow";
   #followingState = "Following";
   #unfollowState = "Unfollow";
   #removeState = "Remove";
+  #cardName;
 
-  #doneIconClass = "done-icon";
+  set cardName(name) {
+    this.#cardName = name;
+  }
+
+  get cardName() {
+    return this.#cardName;
+  }
 
   visit() {
     cy.visit(this.#url);
@@ -21,7 +29,7 @@ export class ButtonPage {
   }
 
   cardButton(cardName, state) {
-    return this.cardElement(cardName).find(`[aria-label="${state}"]`);
+    return this.cardElement(cardName).find(this.#buttonSelector(state));
   }
 
   removeButton(cardName) {
@@ -35,23 +43,41 @@ export class ButtonPage {
   get followState() {
     return this.#followState;
   }
+
   get followingState() {
     return this.#followingState;
   }
+
   get unfollowState() {
     return this.#unfollowState;
   }
+
   get removeState() {
     return this.#removeState;
   }
 
-  clickButtonAndVerifyState(cardName, labelBefore, labelAfter) {
-    this.verifyButtonStateChange(cardName, labelBefore, this.#processingText);
-    this.verifyButtonStateChange(cardName, labelBefore, labelAfter);
+  get processingText() {
+    return this.#processingText;
   }
 
-  verifyTooltipAndClick(cardName, tooltipBefore, tooltipAfter) {
-    const button = this.cardButton(cardName, tooltipBefore);
+  clickButtonAndVerifyState(labelBefore, labelAfter) {
+    this.cardButton(this.cardName, labelBefore).click();
+    // Wait for processing state
+    this.cardButton(this.cardName, labelBefore)
+      .find("button")
+      .should("contain.text", this.processingText)
+      .and("be.disabled");
+    // Then verify final state
+    this.cardElement(this.cardName).should("contain.text", labelAfter);
+    if (labelAfter === this.#followingState) {
+      this.cardElement(this.cardName)
+        .find("svg")
+        .should("have.class", this.#doneIconClass);
+    }
+  }
+
+  verifyTooltipAndClick(tooltipBefore, tooltipAfter) {
+    const button = this.cardButton(this.cardName, tooltipBefore);
 
     button.trigger("mouseover");
     this.tooltip.should("have.text", tooltipBefore);
@@ -60,17 +86,17 @@ export class ButtonPage {
     this.tooltip.should("have.text", tooltipAfter);
   }
 
-  verifyButtonStateChange(cardName, labelBefore, labelAfter) {
-    this.cardButton(cardName, labelBefore)
+  verifyButtonStateChange(labelBefore, labelAfter) {
+    this.cardButton(this.cardName, labelBefore)
       .click()
       .find("button")
-      .should("contain.text", this.#processingText)
+      .should("contain.text", this.processingText)
       .and("be.disabled");
 
-    this.cardElement(cardName).should("contain.text", labelAfter);
+    this.cardElement(this.cardName).should("contain.text", labelAfter);
 
     if (labelAfter === this.#followingState) {
-      this.cardElement(cardName)
+      this.cardElement(this.cardName)
         .find("svg")
         .should("have.class", this.#doneIconClass);
     }
