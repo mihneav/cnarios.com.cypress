@@ -1,5 +1,4 @@
 const { defineConfig } = require("cypress");
-// require("@cypress/grep/src/plugin")(config);
 
 module.exports = defineConfig({
   e2e: {

@@ -90,7 +90,7 @@ describe("Date Picker Page Tests", () => {
    */
   it(
     `Form should show validation error and block submission`,
-    { tags: ["@positive", "@medium"] },
+    { tags: ["@negative", "@high"] },
     () => {
       const invalidCompany = testData.invalidCompany;
 
@@ -113,7 +113,7 @@ describe("Date Picker Page Tests", () => {
    */
   it(
     `Validation message should be shown and form should not submit`,
-    { tags: ["@positive", "@medium"] },
+    { tags: ["@negative", "@medium"] },
     () => {
       const invalidDates = testData.invalidDates;
 
@@ -131,7 +131,7 @@ describe("Date Picker Page Tests", () => {
    */
   it(
     `Record should be added if allowed by business logic`,
-    { tags: ["@positive", "@medium"] },
+    { tags: ["@positive", "@low"] },
     () => {
       const ibm = testData.ibm;
 
@@ -149,7 +149,7 @@ describe("Date Picker Page Tests", () => {
    */
   it(
     `Modal closes and no new data is added`,
-    { tags: ["@positive", "@medium"] },
+    { tags: ["@positive", "@low"] },
     () => {
       const ibm = testData.ibm;
 
@@ -171,7 +171,7 @@ describe("Date Picker Page Tests", () => {
    */
   it(
     `The selected employment record should be removed from the list`,
-    { tags: ["@positive", "@medium"] },
+    { tags: ["@negative", "@medium"] },
     () => {
       const amazonDelete = testData.amazonDelete;
 
